@@ -4,6 +4,127 @@
 ## **Introduction**
 This documentation provides an in-depth explanation of the AWS Cloud Development Kit (CDK) stack for deploying two services (frontend & backend) on **AWS Fargate**, using a **single Application Load Balancer (ALB)** with **path-based routing**. This setup ensures a cost-effective, scalable, and secure architecture for containerized applications.
 
+# **Setup Guide for Deploying the AWS CDK Infrastructure**
+
+## **Prerequisites**
+Before setting up and deploying the AWS CDK infrastructure, ensure that you have the following installed and configured on your system:
+
+### **1. Required Tools**
+- **AWS CDK (Node.js Required)** – Install Node.js and AWS CDK:
+  ```sh
+  # Install Node.js (if not already installed)
+  sudo apt install nodejs npm   # Ubuntu/Debian
+  brew install node             # macOS
+  choco install nodejs          # Windows
+  
+  # Install AWS CDK globally
+  npm install -g aws-cdk
+  ```
+- **Docker** (for building container images for AWS Fargate)
+  ```sh
+  # Install Docker (ensure the Docker daemon is running)
+  ```
+- **Python 3 & Virtual Environment**
+  ```sh
+  # Ensure Python is installed (3.8+ recommended)
+  python3 --version
+  
+  # Install virtualenv if not installed
+  pip install virtualenv
+  ```
+
+### **2. Configure AWS CLI**
+Ensure you are authenticated with AWS and have the necessary permissions:
+```sh
+aws configure
+```
+You should have access to an AWS account with IAM permissions for **CDK deployment, ECS, ALB, and networking setup**.
+
+---
+
+## **Setting Up the CDK Project**
+Since AWS CDK projects require a specific structure, you **cannot simply clone this repository and run `cdk deploy`**. Instead, follow these steps:
+
+### **1. Initialize a New CDK Project**
+Navigate to your working directory and initialize a new CDK project:
+```sh
+mkdir my-cdk-project
+cd my-cdk-project
+cdk init app --language python
+```
+This creates the necessary CDK project structure.
+
+### **2. Set Up a Python Virtual Environment**
+```sh
+# Create a virtual environment
+python3 -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate  # macOS/Linux
+.venv\Scripts\activate     # Windows
+```
+
+### **3. Install Required Dependencies**
+```sh
+pip install -r requirements.txt
+```
+Ensure that the dependencies match those in the `requirements.txt` of the repository.
+
+### **4. Copy the Repository Files to the CDK Project**
+Since CDK requires an initialized project, **you must manually copy the files from this repository into your initialized CDK project**.
+---
+
+## **Bootstrapping Your AWS Environment**
+AWS CDK requires your AWS account to be bootstrapped before deploying any infrastructure.
+
+```sh
+cdk bootstrap aws://your_account_id/your_region
+```
+This sets up necessary resources.
+
+---
+
+## **Deploying the CDK Stack**
+Once you have copied the required files and bootstrapped your AWS environment, deploy the stack:
+
+```sh
+cdk deploy
+```
+This will:
+- Create/update the VPC, subnets, and networking components.
+- Deploy the Application Load Balancer (ALB).
+- Set up the ECS Fargate services (frontend and backend).
+- Apply security configurations.
+
+---
+
+## **Verifying the Deployment**
+After the deployment completes, check the AWS console to confirm:
+- The **ALB** is running and accessible.
+- ECS **Fargate tasks** are successfully launched.
+- The API endpoint (FastAPI) is responding correctly.
+
+You can also check the deployed stack by running:
+```sh
+aws cloudformation list-stacks --query "StackSummaries[?StackStatus!='DELETE_COMPLETE'].StackName" --output text
+```
+and get the respective DNS via:
+```sh
+aws cloudformation describe-stacks --stack-name CombinedFrontendBackendStack --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDNS`].OutputValue' --output text
+```
+---
+
+## **Cleaning Up Resources**
+To avoid unnecessary AWS costs, delete the stack when no longer needed:
+```sh
+cdk destroy
+```
+This removes all AWS resources created by the stack.
+
+---
+
+
+
 ## **Infrastructure Overview**
 
 ### **Network Infrastructure**
