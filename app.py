@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import aws_cdk as cdk
 
-from aws_cdk_rag_fargate.aws_cdk_rag_fargate_stack import CombinedFrontendBackendStack
+from aws_cdk_agent_stack.aws_cdk_agent_stack import CombinedFrontendBackendStack
 
 
 app = cdk.App()
