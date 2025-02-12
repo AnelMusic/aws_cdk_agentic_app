@@ -1,0 +1,6 @@
+Show active stacks after deployment:
+aws cloudformation list-stacks --query "StackSummaries[?StackStatus!='DELETE_COMPLETE'].StackName" --output text
+
+---> This will output a stack name like CombinedFrontendBackendStack
+
+
