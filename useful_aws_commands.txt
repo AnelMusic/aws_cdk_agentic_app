@@ -1,6 +1,10 @@
+Bootstrap account:
+cdk bootstrap aws://your_account_id/your_region
+
 Show active stacks after deployment:
 aws cloudformation list-stacks --query "StackSummaries[?StackStatus!='DELETE_COMPLETE'].StackName" --output text
-
 ---> This will output a stack name like CombinedFrontendBackendStack
 
+Show DNS:
+aws cloudformation describe-stacks --stack-name CombinedFrontendBackendStack --query 'Stacks[0].Outputs[?OutputKey==`LoadBalancerDNS`].OutputValue' --output text
 

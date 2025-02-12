@@ -45,8 +45,9 @@ def create_app() -> FastAPI:
         title=Settings.API_TITLE,
         description=Settings.API_DESCRIPTION,
         version=Settings.API_VERSION,
-        docs_url="/docs",
-        redoc_url="/redoc"
+        docs_url="/api/docs",
+        redoc_url="/api/redoc",
+        openapi_url="/api/openapi.json"
     )
     
     setup_cors(app)
@@ -93,16 +94,15 @@ async def get_root() -> Dict[str, Any]:
     return {
         "message": "Welcome to the Medical Appointment Agent API",
         "version": Settings.API_VERSION,
-        "documentation": "/docs",
-        "health_check": "/health",
-        "usage": "Send a POST request to /query with a JSON body containing a 'user_input' field."
+        "documentation": "/api/docs",
+        "health_check": "/api/health",
+        "usage": "Send a POST request to /api/query with a JSON body containing a 'user_input' field."
     }
 
-# Route setup
 def setup_routes(app: FastAPI) -> None:
-    app.post("/query", response_model=Dict[str, Any], responses={500: {"model": ErrorResponse}})(process_query)
-    app.get("/health", response_model=HealthResponse)(get_health)
-    app.get("/")(get_root)
+    app.post("/api/query", response_model=Dict[str, Any], responses={500: {"model": ErrorResponse}})(process_query)
+    app.get("/api/health", response_model=HealthResponse)(get_health)
+    app.get("/api")(get_root)
 
 # Create application instance
 app = create_app()
