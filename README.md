@@ -33,13 +33,13 @@ Before setting up and deploying the AWS CDK infrastructure, ensure that you have
   pip install virtualenv
   ```
 
-### **2. Configure AWS CLI**
+### **2. Configure AWS CLI and AWS Secret**
 Ensure you are authenticated with AWS and have the necessary permissions:
 ```sh
 aws configure
 ```
-You should have access to an AWS account with IAM permissions for **CDK deployment, ECS, ALB, and networking setup**.
-
+- Create a secret in the aws secret manager and call it agent-app. It must hold your HF_TOKEN and YOUR OPENAI_API_KEY 
+- You should have access to an AWS account with IAM permissions for CDK deployment, ECS, ALB, and networking setup.
 ---
 
 ## **Setting Up the CDK Project**
